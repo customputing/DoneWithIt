@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, Modal, Button, FlatList } from 'react-native';
+import { Dimensions, View, StyleSheet, TouchableWithoutFeedback, Modal, Button, FlatList } from 'react-native';
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 
 import defaultStyles from '../config/styles'
@@ -23,27 +23,29 @@ function AppPicker({ icon, items, numberOfColumns=1, onSelectItem, PickerItemCom
             </TouchableWithoutFeedback >
 
             <Modal visible={modalVisible} animationType="slide" >
-                <Screen  >
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-                        <Button 
-                            style={styles.button} 
-                            title="Close" 
-                            onPress={() => setModalVisible(false)}
-                        />
-                        <FlatList 
+                <Screen >
+                    <View style={{ backgroundColor: 'white', width: Dimensions.get('screen').width }} >
+                        <View style={styles.button}>
+                            <Button 
+                                //style={styles.button} 
+                                title="Close" 
+                                onPress={() => setModalVisible(false)}
+                            />
+                        </View>
+                        <FlatList
                             data={items}
                             keyExtractor={item => item.value.toString()}
                             numColumns={numberOfColumns}
                             renderItem={({ item }) => (
                                 <CategoryPickerItem
                                     item={item}
-                                    label={item.label}
                                     onPress={() => {
                                         setModalVisible(false);
                                         onSelectItem(item);
                                     }}
                                 /> 
-                            )} 
+                            )}
+                            style={{ width: Dimensions.get('window').width }}
                         />
                     </View>
                 </Screen>
@@ -54,8 +56,10 @@ function AppPicker({ icon, items, numberOfColumns=1, onSelectItem, PickerItemCom
 
 const styles = StyleSheet.create({
     button: {
-        alignItems: 'center'
-
+        borderRadius: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 50
     },
     container:{
         backgroundColor: defaultStyles.colors.light,
